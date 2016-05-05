@@ -27,6 +27,10 @@ public class EyeMovement : MonoBehaviour {
 			transform.Translate (new Vector3 (translationX + translationY, 0, translationY - translationX));
 		}
 
+		//if (Input.GetKey (KeyCode.E)) {
+		//transform.Rotate (new Vector3 (0, 90, 0));
+		//}
+
 		////////////////////
 		//mouse scrolling
 		/*

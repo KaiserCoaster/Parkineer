@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Tile {
 
+	public static string prefab = "Tiles/tile";
+
 	GameObject go;
 
 	int x;
