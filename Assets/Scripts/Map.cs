@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Map : MonoBehaviour {
+
+	public static Map S;
 	
 	public Texture2D terrainTiles;
 	public int tileResolution;
@@ -11,7 +13,7 @@ public class Map : MonoBehaviour {
 	GameObject placing;
 
 	Texture2D[] tileTextures;
-	Tile[,] tiles;
+	public Tile[,] tiles;
 
 	int mapSizeX = 50;
 	int mapSizeY = 50;
@@ -19,11 +21,30 @@ public class Map : MonoBehaviour {
 	Editor editor;
 
 	void Start () {
+		S = this;
 		GenerateTextures ();
 		GenerateMapData ();
 		GenerateMapVisuals ();
+		GenerateFences ();
 		editor = new Editor ();
-		CreatePlaceable (new FerrisWheel ());
+		editor.CreatePlaceable (new FerrisWheel ());
+	}
+
+	void Update () {
+		if (Input.GetMouseButtonDown (0)) {
+			Debug.Log ("Pressed left click.");
+			Editor.S.LeftClick ();
+		}
+		if (Input.GetMouseButtonDown (1)) {
+			Debug.Log ("Pressed right click.");
+			Editor.S.RightClick ();
+		}
+		if (Input.GetMouseButtonDown (2)) {
+			Debug.Log ("Pressed middle click.");
+		}
+		if (Input.GetKeyUp (KeyCode.Space)) {
+			Editor.S.Rotate ();
+		}
 	}
 
 	void GenerateTextures () {
@@ -69,6 +90,29 @@ public class Map : MonoBehaviour {
 		}
 	}
 
+	void GenerateFences () {
+		Fence fence = new Fence ();
+		FenceCorner fenceCorner = new FenceCorner ();
+		GameObject fencePrefab = Resources.Load (fence.PREFAB, typeof(GameObject)) as GameObject;
+		GameObject fenceCornerPrefab = Resources.Load (fenceCorner.PREFAB, typeof(GameObject)) as GameObject;
+		Quaternion rot = Quaternion.Euler (new Vector3 (0f, 90f, 0f));
+		GameObject fences = new GameObject ("Fences");
+		// Place fences along edges
+		for (int x = 1; x < mapSizeX - 1; x++) {
+			((GameObject)MonoBehaviour.Instantiate (fencePrefab, new Vector3 (x, 0, 0), Quaternion.identity)).transform.parent = fences.transform;
+			((GameObject)MonoBehaviour.Instantiate (fencePrefab, new Vector3 (x, 0, mapSizeX - 1), Quaternion.identity)).transform.parent = fences.transform;
+		}
+		for (int y = 1; y < mapSizeY - 1; y++) {
+			((GameObject)MonoBehaviour.Instantiate (fencePrefab, new Vector3 (0, 0, y), rot)).transform.parent = fences.transform;
+			((GameObject)MonoBehaviour.Instantiate (fencePrefab, new Vector3 (mapSizeY - 1, 0, y), rot)).transform.parent = fences.transform;
+		}
+		// Place corner fences
+		((GameObject)MonoBehaviour.Instantiate (fenceCornerPrefab, new Vector3 (0, 0, 0), Quaternion.identity)).transform.parent = fences.transform;
+		((GameObject)MonoBehaviour.Instantiate (fenceCornerPrefab, new Vector3 (0, 0, mapSizeY - 1), Quaternion.Euler (new Vector3 (0f, 90f, 0f)))).transform.parent = fences.transform;
+		((GameObject)MonoBehaviour.Instantiate (fenceCornerPrefab, new Vector3 (mapSizeX - 1, 0, mapSizeY - 1), Quaternion.Euler (new Vector3 (0f, 180f, 0f)))).transform.parent = fences.transform;
+		((GameObject)MonoBehaviour.Instantiate (fenceCornerPrefab, new Vector3 (mapSizeX - 1, 0, 0), Quaternion.Euler (new Vector3 (0f, 270f, 0f)))).transform.parent = fences.transform;
+	}
+
 	void InstantiateTile (Tile tile) {
 		// Instatiate the ground tile prefab at the tile location
 		tile.SetGameObject ((GameObject)MonoBehaviour.Instantiate (Resources.Load (Tile.prefab), Map.TileCoordToWorldCoord (tile.GetX (), tile.GetY ()), Quaternion.Euler (new Vector3 (90, 0, 0))));
@@ -93,18 +137,11 @@ public class Map : MonoBehaviour {
 	}
 
 	public void TileHover (int x, int y) {
-		placing.transform.position = tiles [x, y].GetGameObject ().transform.position;
+		editor.TileHover (x, y);
 	}
 
-	public void CreatePlaceable (PlaceableEntity placeable) {
-		// Load material for placing materials and the entity prefab
-		Material okMat = Resources.Load ("placingMat", typeof(Material)) as Material;
-		GameObject goPrefab = Resources.Load (placeable.PREFAB, typeof(GameObject)) as GameObject;
-		// Instantiate the prefab and set all children to use the placing material
-		placing = (GameObject)MonoBehaviour.Instantiate (goPrefab, new Vector3 (0, 0, 0), Quaternion.identity);
-		foreach (Renderer rend in placing.GetComponentsInChildren<Renderer>()) {
-			rend.material = okMat;
-		}
+	public Tile GetTile (int x, int y) {
+		return tiles [x, y];
 	}
 
 	public static Vector3 TileCoordToWorldCoord (int x, int y) {

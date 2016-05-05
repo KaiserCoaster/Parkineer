@@ -8,7 +8,7 @@ public class ClickableTile : MonoBehaviour {
 	public Map map;
 
 	void OnMouseUp () {
-		map.MoveSelectedUnitTo (tileX, tileY);
+		
 	}
 
 	void OnMouseOver () {

@@ -69,7 +69,7 @@ public class EyeMovement : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.Mouse2)) {
-			Eye.GetComponent<Camera> ().orthographicSize = 10;
+			Eye.GetComponent<Camera> ().orthographicSize = 7;
 		}
 
 	}
