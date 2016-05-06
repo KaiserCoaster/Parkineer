@@ -3,6 +3,10 @@ A simple 3D isometric game based on Roller Coaster Tycoon and Parkitect for Game
 
 This stripped-down version of the game allows you to wander around the map and places a few objects onto the grid. It's more of the sandbox engine than gameplay.
 
+Currently, there are the following objects: Ferris Wheel, Wall, Wall Cornerstone, Fence, Corner Fence, and a path tile.
+
+![Screenshot](http://i.imgur.com/aTgVtha.png)
+
 ## Note
 I'm probably going to continue working on this after the due date purely out of interest and self motivation. Feel free to grade from whatever the last commit before the due date was.
 
