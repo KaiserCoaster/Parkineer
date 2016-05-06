@@ -27,4 +27,8 @@ public class UIEventHandler : MonoBehaviour {
 		Editor.S.CreatePlaceable (new CornerWall ());
 	}
 
+	public void NewScrambler () {
+		Editor.S.CreatePlaceable (new Scrambler ());
+	}
+
 }
