@@ -28,6 +28,15 @@ public class Editor {
 	}
 
 	public void CreatePlaceable (PlaceableEntity placeable) {
+		// Cancel any existing placement if this is a different placeable
+		if (this.entity != null && this.ghost != null && this.entity.GetType () == placeable.GetType ()) {
+			this.ghost.SetActive (true);
+			this.mode = Editor.Mode.PLACING;
+			return;
+		} else {
+			Cancel ();
+		}
+		// Set this object as the new editor placeable entity
 		this.entity = placeable;
 		// Load material for placing materials and the entity prefab
 		GameObject goPrefab = Resources.Load (this.entity.PREFAB, typeof(GameObject)) as GameObject;
@@ -45,16 +54,19 @@ public class Editor {
 			// Save the ghost object's position
 			Vector3 pos = this.ghost.transform.position;
 			Quaternion rot = this.ghost.transform.rotation;
-			// Destroy the ghost object
-			UnityEngine.Object.Destroy (this.ghost);
+			// Set the ghost object to inactive
+			this.ghost.SetActive (false);
 			// Instantiate the new game object
 			GameObject goPrefab = Resources.Load (this.entity.PREFAB, typeof(GameObject)) as GameObject;
-			this.ghost = (GameObject)MonoBehaviour.Instantiate (goPrefab, pos, rot);
-			// Switch editing mode and reset vars
-			this.mode = Editor.Mode.VIEWING;
-			this.colliding = false;
-			this.entity = null;
-			this.ghost = null;
+			MonoBehaviour.Instantiate (goPrefab, pos, rot);
+
+			if (this.entity.placeLoop) {
+				// Prepare to place another instance if this should be placed in a loop
+				CreatePlaceable (this.entity);
+			} else {
+				// Switch editing mode and reset vars
+				Cancel ();
+			}
 		}
 	}
 

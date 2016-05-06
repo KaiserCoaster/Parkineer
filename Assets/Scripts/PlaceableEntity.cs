@@ -5,6 +5,8 @@ public class PlaceableEntity {
 
 	public virtual string PREFAB { get { return ""; } }
 
+	public virtual bool placeLoop { get { return false; } }
+
 	public enum STATE {
 		PLACING,
 		PLACED}

@@ -8,6 +8,8 @@ public class Map : MonoBehaviour {
 	public Texture2D terrainTiles;
 	public int tileResolution;
 
+	public GameObject highlighter;
+
 	// ==========================
 
 	GameObject placing;
@@ -18,6 +20,9 @@ public class Map : MonoBehaviour {
 	int mapSizeX = 50;
 	int mapSizeY = 50;
 
+	int hoverX = 0;
+	int hoverY = 0;
+
 	Editor editor;
 
 	void Start () {
@@ -27,16 +32,13 @@ public class Map : MonoBehaviour {
 		GenerateMapVisuals ();
 		GenerateFences ();
 		editor = new Editor ();
-		editor.CreatePlaceable (new FerrisWheel ());
 	}
 
 	void Update () {
 		if (Input.GetMouseButtonDown (0)) {
-			Debug.Log ("Pressed left click.");
 			Editor.S.LeftClick ();
 		}
 		if (Input.GetMouseButtonDown (1)) {
-			Debug.Log ("Pressed right click.");
 			Editor.S.RightClick ();
 		}
 		if (Input.GetMouseButtonDown (2)) {
@@ -59,7 +61,7 @@ public class Map : MonoBehaviour {
 				tex.SetPixels (terrainTiles.GetPixels (x * tileResolution, y * tileResolution, tileResolution, tileResolution));
 				tex.filterMode = FilterMode.Bilinear;
 				tex.Apply ();
-				textures [y * numTilesPerRow + x] = tex;
+				textures [(numRows - y - 1) * numTilesPerRow + x] = tex;
 			}
 		}
 		this.tileTextures = textures;
@@ -71,15 +73,15 @@ public class Map : MonoBehaviour {
 		// Initialize Map Tiles
 		for (int x = 0; x < mapSizeX; x++) {
 			for (int y = 0; y < mapSizeY; y++) {
-				tiles [x, y] = new Tile (x, y, Random.Range (0, 2));
+				tiles [x, y] = new Tile (x, y, Random.Range (0, 3));
 			}
 		}
 		// Make a mud pit
-		for (int x = 3; x < 8; x++) {
+		/*for (int x = 3; x < 8; x++) {
 			for (int y = 6; y < 11; y++) {
 				tiles [x, y].SetTileType (2);
 			}
-		}
+		}*/
 	}
 
 	void GenerateMapVisuals () {
@@ -130,14 +132,14 @@ public class Map : MonoBehaviour {
 		ct.map = this;
 	}
 
-	public void MoveSelectedUnitTo (int x, int y) {
-		//selectedUnit.GetComponent<Unit> ().tileX = x;
-		//selectedUnit.GetComponent<Unit> ().tileY = y;
-		//selectedUnit.transform.position = TileCoordToWorldCoord (x, y);
+	public void TileHover (int x, int y) {
+		hoverX = x;
+		hoverY = y;
+		editor.TileHover (x, y);
 	}
 
-	public void TileHover (int x, int y) {
-		editor.TileHover (x, y);
+	public Tile GetHoveredTile () {
+		return GetTile (hoverX, hoverY);
 	}
 
 	public Tile GetTile (int x, int y) {

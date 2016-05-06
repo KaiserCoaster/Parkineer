@@ -13,12 +13,12 @@ public class ClickableTile : MonoBehaviour {
 
 	void OnMouseOver () {
 		//map.HoverOver (tileX, tileY);
-		GetComponent<Renderer> ().material.color = Color.green;
+		//GetComponent<Renderer> ().material.color = Color.green;
 	}
 
 	void OnMouseExit () {
 		//map.HoverOut (tileX, tileY);
-		GetComponent<Renderer> ().material.color = Color.white;
+		//GetComponent<Renderer> ().material.color = Color.white;
 	}
 
 	void Update () {
@@ -28,6 +28,7 @@ public class ClickableTile : MonoBehaviour {
 		if (GetComponent<Collider> ().Raycast (ray, out hitInfo, Mathf.Infinity)) {
 			//Debug.Log ("Tile: " + tileX + ", " + tileY);
 			map.TileHover (tileX, tileY);
+			Map.S.highlighter.gameObject.transform.position = Map.TileCoordToWorldCoord (tileX, tileY);
 		}
 	}
 

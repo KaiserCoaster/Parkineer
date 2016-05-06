@@ -27,40 +27,19 @@ public class EyeMovement : MonoBehaviour {
 			transform.Translate (new Vector3 (translationX + translationY, 0, translationY - translationX));
 		}
 
-		//if (Input.GetKey (KeyCode.E)) {
-		//transform.Rotate (new Vector3 (0, 90, 0));
-		//}
-
-		////////////////////
-		//mouse scrolling
-		/*
-		float mousePosX = Input.mousePosition.x;
-		float mousePosY = Input.mousePosition.y;
-		int scrollDistance = 5;
-
-		//Horizontal camera movement
-		if (mousePosX < scrollDistance) {
-			transform.Translate (new Vector3 (-1, 0, 1));
+		//rotate
+		if (Input.GetKeyUp (KeyCode.E)) {
+			transform.RotateAround (Map.S.GetHoveredTile ().GetGameObject ().transform.position, Vector3.up, -90f); 
 		}
-		if (mousePosX >= Screen.width - scrollDistance) {
-			transform.Translate (new Vector3 (1, 0, -1));
+		if (Input.GetKeyUp (KeyCode.Q)) {
+			transform.RotateAround (Map.S.GetHoveredTile ().GetGameObject ().transform.position, Vector3.up, 90f); 
 		}
 
-		//Vertical camera movement
-		if (mousePosY < scrollDistance) {
-			transform.Translate (new Vector3 (-1, 0, -1));
-		}
-		if (mousePosY >= Screen.height - scrollDistance) {
-			transform.Translate (new Vector3 (1, 0, 1));
-		}
-		*/
-
-		////////////////////
 		//zooming
 		GameObject Eye = GameObject.Find ("Eye");
 
 
-		if (Input.GetAxis ("Mouse ScrollWheel") * (invertScroll ? -1 : 1) > 0 && Eye.GetComponent<Camera> ().orthographicSize > 1) {
+		if (Input.GetAxis ("Mouse ScrollWheel") * (invertScroll ? -1 : 1) > 0 && Eye.GetComponent<Camera> ().orthographicSize > 2) {
 			Eye.GetComponent<Camera> ().orthographicSize -= 1;
 		}
 
