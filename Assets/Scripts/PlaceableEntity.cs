@@ -7,6 +7,8 @@ public class PlaceableEntity {
 
 	public virtual bool placeLoop { get { return false; } }
 
+	public virtual int cost { get { return 0; } }
+
 	public enum STATE {
 		PLACING,
 		PLACED}

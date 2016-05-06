@@ -7,4 +7,6 @@ public class Scrambler : PlaceableEntity {
 
 	public override bool placeLoop { get { return false; } }
 
+	public override int cost { get { return 3000; } }
+
 }

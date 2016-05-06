@@ -7,4 +7,6 @@ public class Path : PlaceableEntity {
 
 	public override bool placeLoop { get { return true; } }
 
+	public override int cost { get { return 15; } }
+
 }

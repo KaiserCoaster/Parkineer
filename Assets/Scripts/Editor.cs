@@ -60,6 +60,9 @@ public class Editor {
 			GameObject goPrefab = Resources.Load (this.entity.PREFAB, typeof(GameObject)) as GameObject;
 			MonoBehaviour.Instantiate (goPrefab, pos, rot);
 
+			// Subtract cost from bank
+			Money.S.Charge (this.entity.cost);
+
 			if (this.entity.placeLoop) {
 				// Prepare to place another instance if this should be placed in a loop
 				CreatePlaceable (this.entity);

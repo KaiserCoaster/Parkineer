@@ -7,4 +7,6 @@ public class FerrisWheel : PlaceableEntity {
 
 	public override bool placeLoop { get { return false; } }
 
+	public override int cost { get { return 4000; } }
+
 }
